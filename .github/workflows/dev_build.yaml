@@ -1,14 +1,16 @@
 ---
-name: Build dist
+name: Build Dev
 
 on:
-  workflow_dispatch:
-  release:
-    types: [released]
-
+  pull_request_target:
+    branches:
+      - dev
+    types:
+      - closed
 
 jobs: 
   Build-dist:
+    if: github.event.pull_request.merged == true
     runs-on: self-hosted
     steps:
       - name: Check out code
@@ -22,7 +24,7 @@ jobs:
  
       - name: Build project image
         run: |
-          podman build . -t ${{ github.event.repository.name }}
+          podman build . -t ${{ github.event.repository.name }}-dev
 
       - name: login to docker
         run: |
@@ -30,8 +32,8 @@ jobs:
 
       - name: Publish project image
         run: |
-          ID=$(podman images ${{ github.event.repository.name }} -q)
-          podman image push $ID docker.io/${{ vars.docker_user}}/${{ github.event.repository.name }}:${{ github.event.release.tag_name }}
+          ID=$(podman images ${{ github.event.repository.name }}-dev -q)
+          podman image push $ID docker.io/${{ vars.docker_user}}/${{ github.event.repository.name }}-dev:${{ github.event.release.tag_name }}
 
       - name: logout 
         run: |
