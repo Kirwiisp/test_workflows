@@ -24,7 +24,7 @@ jobs:
  
       - name: Build project image
         run: |
-          podman build . -t ${{ github.event.repository.name }}_dev:
+          podman build . -t ${{ github.event.repository.name }}_dev
 
       - name: login to docker
         run: |
