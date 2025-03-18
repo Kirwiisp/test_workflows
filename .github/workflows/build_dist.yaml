@@ -1,14 +1,17 @@
 ---
 name: Build dist
 
-on: 
-  push:
+on:
+  pull_request_target:
     branches:
       - main
-      - dev
+    types:
+      - closed
+
 
 jobs: 
   Build-dist:
+    if: github.event.pull_request.merged == true
     runs-on: self-hosted
     steps:
       - name: Check out code
@@ -22,3 +25,4 @@ jobs:
  
       - name: List files
         run: ls ${{ github.workspace }}
+
