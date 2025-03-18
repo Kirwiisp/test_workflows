@@ -1,0 +1,24 @@
+---
+name: Build dist
+
+on: 
+  push:
+    branches:
+      - main
+      - dev
+
+jobs: 
+  Build-dist:
+    runs-on: self-hosted
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      
+      - name: Install dependancies
+        run: npm install
+
+      - name: Build to dist
+        run: npm run build
+ 
+      - name: List files
+        run: ls ${{ github.workspace }}
