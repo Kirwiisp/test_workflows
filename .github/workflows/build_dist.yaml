@@ -5,19 +5,11 @@ on:
   workflow_dispatch:
   release:
     types: [released]
-  #  pull_request_target:
-  #    branches:
-  #      - main
-  #    types:
-  #      - closed
 
 
 jobs: 
   Build-dist:
-    # if: github.event.pull_request.merged == true
     runs-on: self-hosted
-    env:
-      project_name: ${{github.event.repository.name}}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -34,12 +26,12 @@ jobs:
 
       - name: login to docker
         run: |
-          podman login docker.io -u ${{ vars.docker_user }} -p ${{ secrets.docker_token }}
+          echo ${{ secrets.docker_token }} | podman login docker.io -u ${{ vars.docker_user }} --password-stdin
 
       - name: Publish project image
         run: |
-          ID=$(podman images $project_name -q)
-          podman image push $ID docker.io/${{ vars.docker_user}}/$project_name${{ github.ref_name }}
+          ID=$(podman images ${{ github.event.repository.name }} -q)
+          podman image push $ID docker.io/${{ vars.docker_user}}/${{ github.event.repository.name }}:${{ github.event.release.tag_name }}
 
       - name: logout 
         run: |
