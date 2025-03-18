@@ -33,7 +33,7 @@ jobs:
       - name: Publish project image
         run: |
           ID=$(podman images ${{ github.event.repository.name }}_dev -q)
-          podman image push $ID docker.io/${{ vars.docker_user}}/${{ github.event.repository.name }}_dev:${{ github.event.created_at }}
+          podman image push $ID docker.io/${{ vars.docker_user}}/${{ github.event.repository.name }}_dev:${{ github.sha }}
 
       - name: logout 
         run: |
