@@ -24,7 +24,7 @@ jobs:
  
       - name: Build project image
         run: |
-          podman build . -t ${{ github.event.repository.name }}-dev
+          podman build . -t ${{ github.event.repository.name }}_dev
 
       - name: login to docker
         run: |
@@ -32,8 +32,8 @@ jobs:
 
       - name: Publish project image
         run: |
-          ID=$(podman images ${{ github.event.repository.name }}-dev -q)
-          podman image push $ID docker.io/${{ vars.docker_user}}/${{ github.event.repository.name }}-dev:${{ github.event.release.tag_name }}
+          ID=$(podman images ${{ github.event.repository.name }}_dev -q)
+          podman image push $ID docker.io/${{ vars.docker_user}}/${{ github.event.repository.name }}_dev:${{ github.event.release.tag_name }}
 
       - name: logout 
         run: |
